@@ -349,7 +349,7 @@ public class Download extends JPanel {
 						JOptionPane.showMessageDialog(null,"Download is complete!!!");
 						if (play.isSelected()){
 							Playback.getInstance().playDownloadedVideo(location+fileName);
-							Main.getInstance().changeToPlayback();
+							VamixTabs.getInstance().changeToPlayback();
 						}
 						break;
 					case 1:

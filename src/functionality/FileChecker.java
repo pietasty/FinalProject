@@ -18,9 +18,16 @@ import javax.swing.SwingWorker;
 public class FileChecker extends SwingWorker<Integer, Void> {
 	private static FileChecker filechecker;
 	private Process process;
+	private int option;
 	private String input;
 
 	private FileChecker(String input) {
+		this.input = input;
+		this.option = 0;
+	}
+	
+	private FileChecker(String input, int option){
+		this.option = option;
 		this.input = input;
 	}
 
@@ -28,10 +35,14 @@ public class FileChecker extends SwingWorker<Integer, Void> {
 	protected Integer doInBackground() throws Exception {
 		int output = 0;
 		ProcessBuilder builder;
-
-		String cmd = "file -ib \""
-				+ input
+		
+		String cmd;
+		if(option > 0){
+			cmd = "file -ib \"" + input+ "\" | grep -c \"audio\\|Audio\"";
+		} else {
+			cmd = "file -ib \"" + input
 				+ "\" | grep -c \"video\\|Video\\|audio\\|Audio\"";
+		}
 
 		builder = new ProcessBuilder("/bin/bash", "-c", cmd);
 
@@ -50,7 +61,6 @@ public class FileChecker extends SwingWorker<Integer, Void> {
 		} catch (IOException e) {
 
 		}
-
 		return output;
 	}
 
@@ -70,7 +80,22 @@ public class FileChecker extends SwingWorker<Integer, Void> {
 		} catch (InterruptedException | ExecutionException e) {
 			return false;
 		}
-				
 	}
-
+	
+	/**
+	 * Checks if a file is an audio file or not
+	 */
+	public static boolean isAudioFile(String s){
+		filechecker = new FileChecker(s,1);
+		filechecker.execute();
+		try {
+			int result = filechecker.get();
+			if (result > 0) {
+				return true;
+			}
+			return false;
+		} catch (InterruptedException | ExecutionException e) {
+			return false;
+		}
+	}
 }

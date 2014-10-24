@@ -825,7 +825,7 @@ public class Text extends JPanel {
 			String line;
 			Matcher matcher;
 			while ((line = stdout.readLine()) != null && !isCancelled()) {
-				//TODO
+				//TODO why does text not work???? so the confused lol gg
 				System.out.println(line);
 				// match pattern time=000.00
 				matcher = Pattern.compile("time=\\d+.\\d+").matcher(line);

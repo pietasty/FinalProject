@@ -5,16 +5,12 @@ package vamix;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.Font;
 import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 import uk.co.caprica.vlcj.binding.LibVlc;
@@ -83,16 +79,11 @@ public class Main extends JFrame {
 		});
 	}
 	
-	
-	private static void setLookAndFeel(){
+	private void setLookAndFeel(){
 		try {
 			UIManager.setLookAndFeel(new NimbusLookAndFeel());
 		} catch (UnsupportedLookAndFeelException e1) {
 			e1.printStackTrace();
 		}
-	}
-	
-	public void changeToPlayback(){
-		vamixTabs.setSelectedIndex(0);
 	}
 }

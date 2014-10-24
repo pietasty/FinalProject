@@ -158,9 +158,8 @@ public class Playback extends JPanel {
 				videoSlider.setValue(time);
 				videoSlider.setMaximum((int)video.getLength());
 				
-				//TODO get this shit working
 				//Stops the video once the video has finished.
-				if (video.getTime() == video.getLength()) {
+				if (video.getTime() > video.getLength()- 50) {
 					speed = 0;
 					timer.stop();
 					video.stop();
@@ -553,7 +552,12 @@ public class Playback extends JPanel {
 		forward.setEnabled(b);
 		mute.setEnabled(b);
 		sound.setEnabled(b);
-		camera.setEnabled(b);
+		
+		if(!FileChecker.isAudioFile(Main.getInstance().original.getAbsolutePath())){
+			camera.setEnabled(true);
+		} else {
+			camera.setEnabled(false);
+		}
 	}
 
 	// Allows resizing of the panel

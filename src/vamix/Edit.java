@@ -90,6 +90,9 @@ public class Edit extends JPanel {
 	private JSpinner fadein;
 	private JSpinner fadeout;
 	private JButton fade;
+	
+	private JButton trim;
+	private JButton subtitles;
 
 	public static Edit getInstance() {
 		if (instance == null) {
@@ -117,6 +120,8 @@ public class Edit extends JPanel {
 		addRotate();
 		addFlip();
 		addFade();
+		addTrim();
+		addSubtitles();
 	}
 
 	// Adds in assignment 3 functionality.
@@ -164,7 +169,7 @@ public class Edit extends JPanel {
 			}
 		});
 		extractAudio.setEnabled(false);
-		extractAudio.setSize(135, 25);
+		extractAudio.setBounds(462,387,135, 25);
 		add(extractAudio);
 
 		replaceAudio = new JButton("Replace Audio");
@@ -207,7 +212,7 @@ public class Edit extends JPanel {
 			}
 		});
 		replaceAudio.setEnabled(false);
-		replaceAudio.setSize(135, 25);
+		replaceAudio.setBounds(609,387,135, 25);
 		add(replaceAudio);
 
 		overlayAudio = new JButton("Overlay Audio");
@@ -249,7 +254,7 @@ public class Edit extends JPanel {
 			}
 		});
 		overlayAudio.setEnabled(false);
-		overlayAudio.setSize(135, 25);
+		overlayAudio.setBounds(756,387,135, 25);
 		add(overlayAudio);
 	}
 
@@ -550,6 +555,29 @@ public class Edit extends JPanel {
 		fade.setEnabled(false);
 		fade.setBounds(756, 160, 135, 25);
 		add(fade);
+		
+
+	}
+	
+	private void addTrim(){
+		trim = new JButton("Trim Video");
+		trim.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		trim.setBounds(756, 350, 135, 25);
+		add(trim);
+		
+	}
+	
+	private void addSubtitles(){
+		subtitles = new JButton("Add Subtitles");
+		subtitles.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		subtitles.setBounds(756, 313, 135, 25);
+		add(subtitles);
 	}
 
 	/**
@@ -613,7 +641,7 @@ public class Edit extends JPanel {
 	}
 
 	/**
-	 * Pasues the video.
+	 * Pauses the video.
 	 */
 	public void pauseVideo() {
 		if (video.isPlaying()) {

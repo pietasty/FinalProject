@@ -7,6 +7,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
+import functionality.FileChecker;
+
 import vamix.Main;
 
 import java.awt.event.ActionListener;
@@ -64,18 +66,30 @@ public class Replace extends JPanel {
 		JButton btnNewButton = new JButton("Choose File");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser jfile = new JFileChooser();
-				jfile.setCurrentDirectory(new File(defaultlocation));
-
-				int response = jfile.showOpenDialog(null);
-				if (response == JFileChooser.APPROVE_OPTION) {
-					infile = jfile.getSelectedFile().toString();
-					String basename = infile.substring(
-							infile.lastIndexOf('/') + 1, infile.length());
-					input.setText(basename);
+				int status = 0;
+				
+				while (status == 0){
+					JFileChooser jfile = new JFileChooser();
+					jfile.setCurrentDirectory(new File(defaultlocation));
+	
+					int response = jfile.showOpenDialog(null);
+					if (response == JFileChooser.APPROVE_OPTION) {
+						infile = jfile.getSelectedFile().toString();
+						String basename = infile.substring(
+								infile.lastIndexOf('/') + 1, infile.length());
+						if(!FileChecker.isAudioFile(infile)){
+							JOptionPane.showMessageDialog(null, basename+" is not an audio file!", "Error!",JOptionPane.ERROR_MESSAGE);
+							infile = null;
+						} else {
+							input.setText(basename);
+							status = 1;
+						}
+					} else {
+						status = 1;
+					}
+	
+					jfile.setVisible(true);
 				}
-
-				jfile.setVisible(true);
 			}
 		});
 		btnNewButton.setBounds(214, 39, 117, 25);
@@ -152,7 +166,7 @@ public class Replace extends JPanel {
 		// Checks if user gave an inputfile
 		if (input.getText().trim().equals("")) {
 			JOptionPane.showMessageDialog(null,
-					"Please give a input filename!", "Error!",
+					"Please choose an input file!", "Error!",
 					JOptionPane.ERROR_MESSAGE);
 			return false;
 			// Checks if user gave an ouputfile name

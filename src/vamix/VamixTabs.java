@@ -17,10 +17,13 @@ public class VamixTabs extends JTabbedPane {
 	}
 	
 	private VamixTabs(){
+		//Adds the panels to the tab
 		this.add("Playback", Playback.getInstance());
 		this.add("Editor", Edit.getInstance());
 		this.add("Text", Text.getInstance());
 		this.add("Download", Download.getInstance());
+		
+		//Deals with events when 
 		this.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				// Pause the playback video when switching to a new tab
@@ -62,5 +65,9 @@ public class VamixTabs extends JTabbedPane {
 				}
 			}
 		});
+	}
+	
+	public void changeToPlayback(){
+		setSelectedIndex(0);
 	}
 }
