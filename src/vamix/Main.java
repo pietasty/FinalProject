@@ -10,8 +10,12 @@ import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 import uk.co.caprica.vlcj.binding.LibVlc;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
@@ -31,14 +35,14 @@ public class Main extends JFrame {
 	public File original;
 
 	// Keeps track the location of where resources are
-	public static final String playpic = "/resource/play.png";
-	public static final String pausepic = "/resource/pause.png";
-	public static final String stoppic = "/resource/stop.png";
-	public static final String backpic = "/resource/back.png";
-	public static final String forwardpic = "/resource/forward.png";
-	public static final String mutepic = "/resource/mute.png";
-	public static final String highsoundpic = "/resource/highsound.png";
-	public static final String lowsoundpic = "/resource/lowsound.png";
+	public static final String PLAYPIC = "/resource/play.png";
+	public static final String PAUSEPIC = "/resource/pause.png";
+	public static final String STOPPIC = "/resource/stop.png";
+	public static final String BACKPIC = "/resource/back.png";
+	public static final String FORWARDPIC = "/resource/forward.png";
+	public static final String MUTEPIC = "/resource/mute.png";
+	public static final String HIGHSOUNDPIC = "/resource/highsound.png";
+	public static final String LOWSOUNDPIC = "/resource/lowsound.png";
 
 	// Singleton
 	public static Main getInstance() {
@@ -49,58 +53,15 @@ public class Main extends JFrame {
 	}
 
 	// define frames
-	JTabbedPane vamixTabs = new JTabbedPane();
+	JTabbedPane vamixTabs;
 
 	private Main() {
 		// set up screen
 		this.setTitle("VAMIX - Video Audio Mixer");
 		this.setMinimumSize(new Dimension(900, 500));
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		vamixTabs.add("Playback", Playback.getInstance());
-		vamixTabs.add("Editor", Edit.getInstance());
-		vamixTabs.add("Text", Text.getInstance());
-		vamixTabs.add("Download", Download.getInstance());
-		vamixTabs.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				// Pause the playback video when switching to a new tab
-				if (!(vamixTabs.getSelectedComponent().equals(Playback
-						.getInstance()))) {
-					Playback.getInstance().pauseVideo();
-				}
-				// Pause the text video when switching to a new tab
-				if (!(vamixTabs.getSelectedComponent().equals(Text
-						.getInstance()))) {
-					Text.getInstance().pauseVideo();
-				}
-				// Pause the edit video when switching to a new tab
-				if (!(vamixTabs.getSelectedComponent().equals(Edit
-						.getInstance()))) {
-					Edit.getInstance().pauseVideo();
-				}
-				// Checks the for audio track of a video when switching to edit
-				// tab
-				if (vamixTabs.getSelectedComponent().equals(Edit.getInstance())
-						&& original != null) {
-					Edit.getInstance().checkForAudioTrack();
-				}
-				// updated the selected file label when switching to a different
-				// tab
-				if (!vamixTabs.getSelectedComponent()
-						.equals(Main.getInstance()) && original != null) {
-					Text.getInstance().filenameLabel.setText("Selected file: "
-							+ original.getName());
-					Text.getInstance().filenameLabel.setVisible(true);
-					Text.getInstance().filenameLabel.setFont(new Font(
-							Font.SANS_SERIF, 0, 10));
-					Edit.getInstance().filenameLabel.setText("Selected file: "
-							+ original.getName());
-					Edit.getInstance().filenameLabel.setVisible(true);
-					Edit.getInstance().filenameLabel.setFont(new Font(
-							Font.SANS_SERIF, 0, 10));
-					Edit.getInstance().enableEditButtons(true);
-				}
-			}
-		});
+		setLookAndFeel();
+		vamixTabs = VamixTabs.getInstance();
 		this.getContentPane().add(vamixTabs);
 	}
 	
@@ -120,5 +81,18 @@ public class Main extends JFrame {
 				}
 			}
 		});
+	}
+	
+	
+	private static void setLookAndFeel(){
+		try {
+			UIManager.setLookAndFeel(new NimbusLookAndFeel());
+		} catch (UnsupportedLookAndFeelException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	public void changeToPlayback(){
+		vamixTabs.setSelectedIndex(0);
 	}
 }

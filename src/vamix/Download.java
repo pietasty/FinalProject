@@ -175,7 +175,7 @@ public class Download extends JPanel {
 	//TODO remove the set text
 	private void urlTextField(){
 		url = new JTextField();
-		url.setSize(345, 19);
+		url.setSize(345, 25);
 		url.setText("http://ccmixter.org/content/Zapac/Zapac_-_Test_Drive.mp3");
 		add(url);
 	}
@@ -349,6 +349,7 @@ public class Download extends JPanel {
 						JOptionPane.showMessageDialog(null,"Download is complete!!!");
 						if (play.isSelected()){
 							Playback.getInstance().playDownloadedVideo(location+fileName);
+							Main.getInstance().changeToPlayback();
 						}
 						break;
 					case 1:

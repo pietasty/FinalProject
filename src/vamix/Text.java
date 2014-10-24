@@ -26,6 +26,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
+import javax.swing.border.Border;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.PlainDocument;
@@ -317,6 +318,8 @@ public class Text extends JPanel {
 		topPanel.add(startLabel, BorderLayout.NORTH);
 		// set document filter for start text
 		startText.setDocument(new TextDocumentFilter());
+		Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
+		startText.setBorder(border);
 		topPanel.add(startText, BorderLayout.CENTER);
 		startText.setMinimumSize(new Dimension(300, 105)); // set min size
 		// add time selector for length of text duration
@@ -347,6 +350,7 @@ public class Text extends JPanel {
 
 		// set document filter for end text
 		endText.setDocument(new TextDocumentFilter());
+		endText.setBorder(border);
 		bottomPanel.add(endText, BorderLayout.CENTER);
 		endText.setMinimumSize(new Dimension(300, 105)); // set min size
 		// add end time duration selector
@@ -995,7 +999,7 @@ public class Text extends JPanel {
 	private void playButton() {
 		play = new JButton();
 
-		setIcon(play, Main.playpic);
+		setIcon(play, Main.PLAYPIC);
 
 		play.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1018,7 +1022,7 @@ public class Text extends JPanel {
 	private void pauseButton() {
 		pause = new JButton();
 
-		setIcon(pause, Main.pausepic);
+		setIcon(pause, Main.PAUSEPIC);
 
 		pause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1033,7 +1037,7 @@ public class Text extends JPanel {
 
 	private void stopButton() {
 		stop = new JButton();
-		setIcon(stop, Main.stoppic);
+		setIcon(stop, Main.STOPPIC);
 
 		stop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1046,16 +1050,16 @@ public class Text extends JPanel {
 	private void muteButton() {
 		mute = new JButton();
 
-		setIcon(mute, Main.mutepic);
+		setIcon(mute, Main.MUTEPIC);
 
 		mute.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (video.isMute()) {
 					video.mute(false);
-					setIcon(mute, Main.mutepic);
+					setIcon(mute, Main.MUTEPIC);
 				} else {
 					video.mute(true);
-					setIcon(mute, Main.lowsoundpic);
+					setIcon(mute, Main.LOWSOUNDPIC);
 				}
 			}
 		});
@@ -1066,7 +1070,7 @@ public class Text extends JPanel {
 	private void forwardButton() {
 		forward = new JButton();
 
-		setIcon(forward, Main.forwardpic);
+		setIcon(forward, Main.FORWARDPIC);
 
 		forward.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1080,7 +1084,7 @@ public class Text extends JPanel {
 	private void backButton() {
 		back = new JButton();
 
-		setIcon(back, Main.backpic);
+		setIcon(back, Main.BACKPIC);
 
 		back.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

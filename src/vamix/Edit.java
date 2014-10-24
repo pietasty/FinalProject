@@ -311,7 +311,7 @@ public class Edit extends JPanel {
 		add(videoPanel);
 
 		play = new JButton();
-		setIcon(play, Main.playpic);
+		setIcon(play, Main.PLAYPIC);
 		play.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (video.isPlayable()) {
@@ -331,7 +331,7 @@ public class Edit extends JPanel {
 		add(play);
 
 		pause = new JButton();
-		setIcon(pause, Main.pausepic);
+		setIcon(pause, Main.PAUSEPIC);
 		pause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				video.pause();
@@ -344,7 +344,7 @@ public class Edit extends JPanel {
 		add(pause);
 
 		stop = new JButton();
-		setIcon(stop, Main.stoppic);
+		setIcon(stop, Main.STOPPIC);
 		stop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				pressStopButton();
@@ -355,7 +355,7 @@ public class Edit extends JPanel {
 		add(stop);
 
 		forward = new JButton();
-		setIcon(forward, Main.forwardpic);
+		setIcon(forward, Main.FORWARDPIC);
 		forward.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				video.skip(10000);
@@ -366,7 +366,7 @@ public class Edit extends JPanel {
 		add(forward);
 
 		back = new JButton();
-		setIcon(back, Main.backpic);
+		setIcon(back, Main.BACKPIC);
 		back.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				video.skip(-10000);
@@ -377,15 +377,15 @@ public class Edit extends JPanel {
 		add(back);
 
 		mute = new JButton();
-		setIcon(mute, Main.mutepic);
+		setIcon(mute, Main.MUTEPIC);
 		mute.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (video.isMute()) {
 					video.mute(false);
-					setIcon(mute, Main.mutepic);
+					setIcon(mute, Main.MUTEPIC);
 				} else {
 					video.mute(true);
-					setIcon(mute, Main.lowsoundpic);
+					setIcon(mute, Main.LOWSOUNDPIC);
 				}
 			}
 		});
@@ -420,7 +420,7 @@ public class Edit extends JPanel {
 		add(rotateSelector);
 
 		// Button that executes the command.
-		rotate = new JButton("rotate");
+		rotate = new JButton("Rotate");
 		rotate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				pressStopButton();

@@ -15,6 +15,7 @@ import javax.swing.Timer;
 
 import java.awt.BorderLayout;
 import java.awt.Image;
+import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 
@@ -31,11 +32,13 @@ import javax.swing.event.ChangeEvent;
 
 import functionality.FileChecker;
 import functionality.ScreenShot;
+import vamix.Main;
 
 import java.awt.event.HierarchyBoundsAdapter;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
 
 /**
  * Playback panel
@@ -49,6 +52,7 @@ public class Playback extends JPanel {
 	private EmbeddedMediaPlayer video;
 	private JPanel videoPanel;
 	private JSlider videoSlider;
+	
 	private Timer videoSliderClock;
 	private JLabel videoTimer;
 
@@ -141,22 +145,22 @@ public class Playback extends JPanel {
 					video.skip(5000);
 					break;
 				default:
-				}
-
-				if (speed == 0) {
 					pause.setVisible(true);
 					play.setVisible(false);
+					timer.stop();
 				}
 			}
 		});
 		// This clock reports on the time in the video and updates the scrollBar
 		videoSliderClock = new Timer(500, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int time = (int) (video.getTime() / 1000);
+				int time = (int) (video.getTime());
 				videoSlider.setValue(time);
-				videoSlider.setMaximum((int) video.getLength() / 1000);
-
-				if (video.getTime() == video.getLength() - 1000) {
+				videoSlider.setMaximum((int)video.getLength());
+				
+				//TODO get this shit working
+				//Stops the video once the video has finished.
+				if (video.getTime() == video.getLength()) {
 					speed = 0;
 					timer.stop();
 					video.stop();
@@ -185,13 +189,27 @@ public class Playback extends JPanel {
 	private void addvideoSlider() {
 		// Timer to change the video slider
 		videoSlider = new JSlider(JSlider.HORIZONTAL);
+		//Allows the user to click on a part of a slider and go to the position in the video
+		//Reference: http://stackoverflow.com/questions/7095428/jslider-clicking-makes-the-dot-go-towards-that-direction
+		//^ that site helped me to get this to work =D
+		videoSlider.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Point p = e.getPoint();
+				double percent = p.x / ((double) videoSlider.getWidth());
+				int range = videoSlider.getMaximum() - videoSlider.getMinimum();
+				double newVal = range * percent;
+				int result = (int) (videoSlider.getMinimum() + newVal);
+				video.setTime(result);
+			}
+		});
 		// Allows user to drag the slider to change the time of the video.
 		videoSlider.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				videoSliderClock.stop();
 				int time = videoSlider.getValue();
-				video.setTime(time * 1000);
+				video.setTime(time);
 				videoSliderClock.start();
 			}
 		});
@@ -240,7 +258,7 @@ public class Playback extends JPanel {
 	// Adds the play Button
 	private void playButton() {
 		play = new JButton();
-		setIcon(play, Main.playpic);
+		setIcon(play, Main.PLAYPIC);
 
 		// plays the video depending on situation
 		play.addActionListener(new ActionListener() {
@@ -277,7 +295,7 @@ public class Playback extends JPanel {
 	// Adds the pause button
 	private void pauseButton() {
 		pause = new JButton();
-		setIcon(pause, Main.pausepic);
+		setIcon(pause, Main.PAUSEPIC);
 
 		// pauses the video when button pressed
 		pause.addActionListener(new ActionListener() {
@@ -297,7 +315,7 @@ public class Playback extends JPanel {
 	// Adds the stop button
 	private void stopButton() {
 		stop = new JButton();
-		setIcon(stop, Main.stoppic);
+		setIcon(stop, Main.STOPPIC);
 
 		// Stops the video when button pressed, also toggles buttons
 		stop.addActionListener(new ActionListener() {
@@ -320,7 +338,7 @@ public class Playback extends JPanel {
 	// Adds the rewind button
 	private void backButton() {
 		back = new JButton();
-		setIcon(back, Main.backpic);
+		setIcon(back, Main.BACKPIC);
 
 		// Rewinds the video when the button is pressed
 		back.addActionListener(new ActionListener() {
@@ -343,7 +361,7 @@ public class Playback extends JPanel {
 	// Adds the fast forward button
 	private void forwardButton() {
 		forward = new JButton();
-		setIcon(forward, Main.forwardpic);
+		setIcon(forward, Main.FORWARDPIC);
 
 		// Fast forwards the video
 		forward.addActionListener(new ActionListener() {
@@ -366,7 +384,7 @@ public class Playback extends JPanel {
 	// Adds the mute button
 	private void muteButton() {
 		mute = new JButton();
-		setIcon(mute, Main.mutepic);
+		setIcon(mute, Main.MUTEPIC);
 
 		mute.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -376,14 +394,14 @@ public class Playback extends JPanel {
 					// change the icon
 					if (video.getVolume() == 0) {
 						video.setVolume(100);
-						setIcon(sound, Main.highsoundpic);
+						setIcon(sound, Main.HIGHSOUNDPIC);
 					}
 					video.mute(false);
-					setIcon(mute, Main.mutepic);
+					setIcon(mute, Main.MUTEPIC);
 					// Mutes the video
 				} else {
 					video.mute(true);
-					setIcon(mute, Main.lowsoundpic);
+					setIcon(mute, Main.LOWSOUNDPIC);
 				}
 			}
 		});
@@ -397,7 +415,7 @@ public class Playback extends JPanel {
 	// Adds the button that allows user to adjust the sound
 	private void soundButton() {
 		sound = new JButton();
-		setIcon(sound, Main.highsoundpic);
+		setIcon(sound, Main.HIGHSOUNDPIC);
 
 		sound.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -406,9 +424,9 @@ public class Playback extends JPanel {
 				if (volume.isVisible()) {
 					if (video.getVolume() == 0) {
 						video.mute(true);
-						setIcon(mute, Main.lowsoundpic);
+						setIcon(mute, Main.LOWSOUNDPIC);
 					} else {
-						setIcon(mute, Main.mutepic);
+						setIcon(mute, Main.MUTEPIC);
 					}
 					volume.setVisible(false);
 					mute.setVisible(true);
@@ -444,9 +462,9 @@ public class Playback extends JPanel {
 				video.setVolume(vol);
 				// Also changes the icon of the sound button
 				if (vol == 0) {
-					setIcon(sound, Main.mutepic);
+					setIcon(sound, Main.MUTEPIC);
 				} else {
-					setIcon(sound, Main.highsoundpic);
+					setIcon(sound, Main.HIGHSOUNDPIC);
 				}
 			}
 		});
@@ -505,7 +523,10 @@ public class Playback extends JPanel {
 			}
 		});
 		
-		camera.setToolTipText("Takes a screen shot of the video at the current time");
+		camera.setToolTipText("<html>"+
+				"Takes a screen shot of the video at the current time" +
+				"<br>"+"Images are saved to where video is located!"+
+				"</html>");
 		camera.setEnabled(false);
 		camera.setSize(32, 32);
 		add(camera);

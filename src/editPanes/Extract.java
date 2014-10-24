@@ -232,12 +232,12 @@ public class Extract extends JPanel {
 	 */
 	private boolean checkValidMath() {
 		if (!(wholeFile.isSelected())) {
-			if (Integer.parseInt(endhh.getText())
-					- Integer.parseInt(starthh.getText()) < 0
-					|| Integer.parseInt(endmm.getText())
-							- Integer.parseInt(startmm.getText()) < 0
-					|| Integer.parseInt(endss.getText())
-							- Integer.parseInt(startss.getText()) < 0) {
+			int start = 0;
+			int end = 0;
+			
+			start = Integer.parseInt(starthh.getText())*60*60 + Integer.parseInt(startmm.getText())* 60 + Integer.parseInt(startss.getText());
+			end = Integer.parseInt(endhh.getText())*60*60 + Integer.parseInt(endmm.getText())*60 + Integer.parseInt(endss.getText());
+			if (end - start < 0) {
 				return false;
 			}
 		}

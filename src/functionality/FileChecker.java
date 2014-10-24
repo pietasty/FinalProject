@@ -1,6 +1,7 @@
 package functionality;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -28,9 +29,9 @@ public class FileChecker extends SwingWorker<Integer, Void> {
 		int output = 0;
 		ProcessBuilder builder;
 
-		String cmd = "file -b \""
+		String cmd = "file -ib \""
 				+ input
-				+ "\" | grep -c \"MPEG\\|Matroska\\|video\\|Video\\|audio\\|Audio\"";
+				+ "\" | grep -c \"video\\|Video\\|audio\\|Audio\"";
 
 		builder = new ProcessBuilder("/bin/bash", "-c", cmd);
 
@@ -69,6 +70,7 @@ public class FileChecker extends SwingWorker<Integer, Void> {
 		} catch (InterruptedException | ExecutionException e) {
 			return false;
 		}
+				
 	}
 
 }
