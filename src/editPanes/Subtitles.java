@@ -22,6 +22,9 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JEditorPane;
 import javax.swing.JButton;
+
+import functionality.subtitles.SubtitlesReader;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -377,6 +380,9 @@ public class Subtitles extends JPanel {
 		return true;
 	}
 	
+	/**
+	 * return the a list of startTimes 
+	 */
 	public List<String> getStartTimes(){
 		List<String> output = new ArrayList<String>();
 		for(int i = 0; i < model.getRowCount(); i++) {
@@ -385,6 +391,9 @@ public class Subtitles extends JPanel {
 		return output;
 	}
 	
+	/**
+	 * return the a list of endTimes 
+	 */
 	public List<String> getEndTimes(){
 		List<String> output = new ArrayList<String>();
 		for(int i = 0; i < model.getRowCount(); i++) {
@@ -394,11 +403,30 @@ public class Subtitles extends JPanel {
 		
 	}
 	
+	/**
+	 * return the a list of text
+	 */
 	public List<String> getText(){
 		List<String> output = new ArrayList<String>();
 		for(int i = 0; i < model.getRowCount(); i++) {
 			output.add((String) model.getValueAt(i, 2));
 		}
 		return output;
+	}
+	
+	public void updateGUI(){
+		List<String> startTime = SubtitlesReader.getStartTime();
+		List<String> endTime = SubtitlesReader.getEndTime();
+		List<String> text = SubtitlesReader.getText();
+		
+		for(int i = 0; i<startTime.size();i++){
+			String[] split = startTime.get(i).split("\\.");
+			String start = split[0];
+			split = endTime.get(i).split("\\.");
+			String end = split[0];
+			
+			model.addRow(new Object[]{start,end ,text.get(i)});
+		}
+		
 	}
 }

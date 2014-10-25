@@ -1,10 +1,7 @@
 package functionality.subtitles;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -41,23 +38,25 @@ public class SubtitlesWriter {
 				mainFile.lastIndexOf('.') + 1);
 		String assFile = extensionless + "ass";
 		f = new File(assFile);
-		
+
 		List<String> startTimes = Subtitles.getInstance().getStartTimes();
 		List<String> endTimes = Subtitles.getInstance().getEndTimes();
 		List<String> text = Subtitles.getInstance().getText();
 
 		try {
-			PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(f.getAbsolutePath(), true)));
-			if (!f.exists()) {
-				f.createNewFile();
-			}
-			if (!checkFile()){
-				for(String s : assFormat){
-					writer.println(s);
-				}
-			}
 			
-			for(int i = 0; i < startTimes.size(); i++){
+			deleteSubtitlesFile();
+			
+			f.createNewFile();
+			
+			PrintWriter writer = new PrintWriter(new BufferedWriter(
+					new FileWriter(f.getAbsolutePath(), true)));
+			
+			for (String s : assFormat) {
+				writer.println(s);
+			}
+
+			for (int i = 0; i < startTimes.size(); i++) {
 				String s = "Dialogue: 0,";
 				s = s + startTimes.get(i) + ".00,";
 				s = s + endTimes.get(i) + ".00,";
@@ -65,34 +64,20 @@ public class SubtitlesWriter {
 				writer.println(s);
 			}
 
-			
-
 			writer.close();
 		} catch (IOException e) {
 		}
 	}
 	
-	private static boolean checkFile(){
-		BufferedReader br = null; 
-		try {
-			br = new BufferedReader(new FileReader(f.getAbsolutePath()));
-			
-			String s = br.readLine();
-			if (s == null){
-				return false;
-			}
-			if (s.equals(assFormat[0])){
-				return true;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (br != null)br.close();
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
+	public static void deleteSubtitlesFile(){
+		String mainFile = Main.getInstance().original.getAbsolutePath();
+		String extensionless = mainFile.substring(0,
+				mainFile.lastIndexOf('.') + 1);
+		String assFile = extensionless + "ass";
+		
+		File f = new File(assFile);
+		if(f.exists()){
+			f.delete();
 		}
-		return false;
 	}
 }

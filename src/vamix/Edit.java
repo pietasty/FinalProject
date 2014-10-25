@@ -13,6 +13,7 @@ import java.awt.event.HierarchyBoundsAdapter;
 import java.awt.event.HierarchyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -37,6 +38,8 @@ import functionality.audio.OverLayWorker;
 import functionality.audio.ReplaceWorker;
 import functionality.helpers.CheckAudioTrack;
 import functionality.helpers.FileChecker;
+import functionality.subtitles.SubtitlesChecker;
+import functionality.subtitles.SubtitlesReader;
 import functionality.subtitles.SubtitlesWriter;
 import functionality.video.FadeWorker;
 import functionality.video.FlipWorker;
@@ -102,8 +105,8 @@ public class Edit extends JPanel {
 	private JSpinner fadeout;
 	private JButton fade;
 	
-	private JButton trim;
 	private JButton subtitles;
+	private SubtitlesReader reader;
 
 	public static Edit getInstance() {
 		if (instance == null) {
@@ -578,6 +581,29 @@ public class Edit extends JPanel {
 				pressStopButton();
 				//TODO like check the file and like get the subtitles 
 				
+				if (SubtitlesChecker.hasSubtitleStream()) {
+					int m = JOptionPane.showConfirmDialog(
+									null,
+									"The video has a subtitles stream\n"
+											+ "Would you like to extract the subtitles from this stream?",
+									"Subtitles", JOptionPane.YES_NO_OPTION,
+									JOptionPane.INFORMATION_MESSAGE);
+					if(m == 0){
+						reader = new SubtitlesReader();
+						reader.execute();
+						try {
+							reader.get();
+						} catch (InterruptedException | ExecutionException e1) {
+						}
+					} 
+				}
+				
+				if(SubtitlesChecker.hasSubtitlesFile()){
+					SubtitlesReader.readSubtitlesFile();
+					Subtitles.getInstance().updateGUI();
+				}
+				
+				
 				//Sets up the joptionpane for adding subtitles
 				String[] options = { "Save Subtitles ", "Add Stream"};
 				JPanel panel = Subtitles.getInstance();
@@ -593,6 +619,7 @@ public class Edit extends JPanel {
 					if (n == 0) {
 						status = Subtitles.getInstance().hasSubtitles();
 						if(!status){
+							SubtitlesWriter.deleteSubtitlesFile();
 							break;
 						}
 					} else if (n == 1) {
