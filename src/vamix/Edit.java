@@ -30,6 +30,7 @@ import editPanes.Extract;
 import editPanes.OverLay;
 import editPanes.Replace;
 import editPanes.Subtitles;
+import editPanes.SubtitlesSave;
 import functionality.*;
 import functionality.audio.ExtractWorker;
 import functionality.audio.OverLayWorker;
@@ -130,7 +131,6 @@ public class Edit extends JPanel {
 		addRotate();
 		addFlip();
 		addFade();
-		addTrim();
 		addSubtitles();
 	}
 
@@ -569,28 +569,22 @@ public class Edit extends JPanel {
 
 	}
 	
-	private void addTrim(){
-		trim = new JButton("Trim Video");
-		trim.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		trim.setBounds(756, 350, 135, 25);
-		add(trim);
-		
-	}
 	
 	//TODO subtitles! =D
 	private void addSubtitles(){
 		subtitles = new JButton("Add Subtitles");
 		subtitles.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				pressStopButton();
 				//TODO like check the file and like get the subtitles 
 				
-				String[] options = { "Save Subtitles ", "Make Video"};
+				//Sets up the joptionpane for adding subtitles
+				String[] options = { "Save Subtitles ", "Add Stream"};
 				JPanel panel = Subtitles.getInstance();
 				panel.setPreferredSize(new Dimension(600, 300));
 				boolean status = false;
+				boolean video = false;
+				
 				// Checks for valid input
 				while (!status) {
 					int n = JOptionPane.showOptionDialog(null, panel,
@@ -601,22 +595,40 @@ public class Edit extends JPanel {
 						if(!status){
 							break;
 						}
-						SubtitlesWriter.writeSubtitles();
 					} else if (n == 1) {
-						//TODO like ask shit
+						//Sets up the joptionpane for adding subtitle stream
+						JPanel newpanel = SubtitlesSave.getInstance();
+						newpanel.setPreferredSize(new Dimension(400,100));
+						String[] saveOptions = {"Ok","Cancel"};
+						boolean check = false;
+						while (!check){
+							int o = JOptionPane.showOptionDialog(null, newpanel,
+									"Saving", JOptionPane.YES_NO_OPTION,
+									JOptionPane.NO_OPTION, null, saveOptions, saveOptions[0]);
+							if (o == 0){
+								check = SubtitlesSave.getInstance().doProcess();
+							} else {
+								break;
+							}
+						}
 					} else {
 						break;
 					}
 					// if valid input then execute the command
 					if (status) {
 						enableEditButtons(false);
-						//TODO Like write to the file and like do the stuff idk?
+						SubtitlesWriter.writeSubtitles();
+						//TODO If they want to get the video! =DDDDDDDDDD
+						if(video){
+							
+						}
 					}
 				}
 				
 			}
 		});
 		subtitles.setBounds(756, 313, 135, 25);
+		subtitles.setEnabled(false);
 		add(subtitles);
 	}
 
@@ -678,6 +690,7 @@ public class Edit extends JPanel {
 		rotate.setEnabled(b);
 		flip.setEnabled(b);
 		fade.setEnabled(b);
+		subtitles.setEnabled(b);
 	}
 
 	/**
