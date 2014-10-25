@@ -302,7 +302,8 @@ public class Extract extends JPanel {
 			return false;
 			// Checks Their math is correct.
 		} else if (!(checkValidMath())) {
-			JOptionPane.showMessageDialog(null, "Your math is horrible",
+			JOptionPane.showMessageDialog(null, "Your math is horrible\n" +
+					"The start time can't be a later time than the end time",
 					"Error!", JOptionPane.ERROR_MESSAGE);
 			return false;
 			// Checks the user does not override the original file

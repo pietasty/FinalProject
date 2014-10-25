@@ -36,6 +36,7 @@ import functionality.audio.OverLayWorker;
 import functionality.audio.ReplaceWorker;
 import functionality.helpers.CheckAudioTrack;
 import functionality.helpers.FileChecker;
+import functionality.subtitles.SubtitlesWriter;
 import functionality.video.FadeWorker;
 import functionality.video.FlipWorker;
 import functionality.video.RotateWorker;
@@ -586,7 +587,7 @@ public class Edit extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				//TODO like check the file and like get the subtitles 
 				
-				String[] options = { "Save Subtitles ", "Cancel" };
+				String[] options = { "Save Subtitles ", "Make Video"};
 				JPanel panel = Subtitles.getInstance();
 				panel.setPreferredSize(new Dimension(600, 300));
 				boolean status = false;
@@ -596,7 +597,13 @@ public class Edit extends JPanel {
 							"Subtitles", JOptionPane.YES_NO_OPTION,
 							JOptionPane.NO_OPTION, null, options, options[0]);
 					if (n == 0) {
-						//TODO like export the file
+						status = Subtitles.getInstance().hasSubtitles();
+						if(!status){
+							break;
+						}
+						SubtitlesWriter.writeSubtitles();
+					} else if (n == 1) {
+						//TODO like ask shit
 					} else {
 						break;
 					}

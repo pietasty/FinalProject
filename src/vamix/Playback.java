@@ -159,7 +159,7 @@ public class Playback extends JPanel {
 				videoSlider.setMaximum((int)video.getLength());
 				
 				//Stops the video once the video has finished.
-				if (video.getTime() > video.getLength()- 50) {
+				if (video.getTime() > video.getLength()- 100) {
 					speed = 0;
 					timer.stop();
 					video.stop();
