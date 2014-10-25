@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-import functionality.FileChecker;
+import functionality.helpers.FileChecker;
 
 import vamix.Main;
 

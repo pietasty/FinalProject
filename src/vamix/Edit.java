@@ -29,7 +29,16 @@ import javax.swing.SpinnerNumberModel;
 import editPanes.Extract;
 import editPanes.OverLay;
 import editPanes.Replace;
+import editPanes.Subtitles;
 import functionality.*;
+import functionality.audio.ExtractWorker;
+import functionality.audio.OverLayWorker;
+import functionality.audio.ReplaceWorker;
+import functionality.helpers.CheckAudioTrack;
+import functionality.helpers.FileChecker;
+import functionality.video.FadeWorker;
+import functionality.video.FlipWorker;
+import functionality.video.RotateWorker;
 
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
@@ -570,10 +579,34 @@ public class Edit extends JPanel {
 		
 	}
 	
+	//TODO subtitles! =D
 	private void addSubtitles(){
 		subtitles = new JButton("Add Subtitles");
 		subtitles.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//TODO like check the file and like get the subtitles 
+				
+				String[] options = { "Save Subtitles ", "Cancel" };
+				JPanel panel = Subtitles.getInstance();
+				panel.setPreferredSize(new Dimension(600, 300));
+				boolean status = false;
+				// Checks for valid input
+				while (!status) {
+					int n = JOptionPane.showOptionDialog(null, panel,
+							"Subtitles", JOptionPane.YES_NO_OPTION,
+							JOptionPane.NO_OPTION, null, options, options[0]);
+					if (n == 0) {
+						//TODO like export the file
+					} else {
+						break;
+					}
+					// if valid input then execute the command
+					if (status) {
+						enableEditButtons(false);
+						//TODO Like write to the file and like do the stuff idk?
+					}
+				}
+				
 			}
 		});
 		subtitles.setBounds(756, 313, 135, 25);

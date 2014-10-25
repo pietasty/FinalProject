@@ -1,4 +1,4 @@
-package functionality;
+package functionality.video;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,6 +9,8 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+
+import functionality.helpers.DataCollector;
 
 import vamix.Edit;
 import vamix.Main;
@@ -39,68 +41,16 @@ public class FadeWorker extends SwingWorker<Integer, Void> {
 
 	@Override
 	protected Integer doInBackground() throws Exception {
-		ProcessBuilder databuilder;
-
-		// First it check for the fps and duration of the video
-		databuilder = new ProcessBuilder("avprobe",
-				Main.getInstance().original.getAbsolutePath());
-
-		// Sets up the builder and process
-		databuilder.redirectErrorStream(true);
-		try {
-			process = databuilder.start();
-			InputStream stdout = process.getInputStream();
-			BufferedReader stdoutBuffered = new BufferedReader(
-					new InputStreamReader(stdout));
-			String line = null;
-			while ((line = stdoutBuffered.readLine()) != null && !isCancelled()) {
-				if (line.contains("fps")) {
-					fpsline = line;
-				}
-				if (line.contains("Duration")) {
-					durationline = line;
-				}
-				publish();
-			}
-			stdoutBuffered.close();
-		} catch (IOException e) {
-		}
-
-		// If value not given assume fps is 24, the normal frames of a video
-		if (fpsline == null) {
-			fpsline = " 24 fps";
-		}
-
-		if (process.waitFor() > 0 || durationline == null) {
-			return -1;
-		}
-
-		// String manipulation to find the fps if fps is given
-		String[] findfps = fpsline.split(",");
-		for (String s : findfps) {
-			if (s.contains("fps")) {
-				fpsline = s;
-			}
-		}
-		findfps = fpsline.split(" ");
-		fps = Integer.parseInt(findfps[1]);
-
-		// String manipulation to find the duration of the video
-		String[] findduration = durationline.split(",");
-		for (String s : findduration) {
-			if (s.contains("Duration")) {
-				durationline = s;
-			}
-		}
-		findduration = durationline.split(":");
-		hh = Integer.parseInt(findduration[1].trim());
-		mm = Integer.parseInt(findduration[2]);
-		String[] sec = findduration[3].split("\\.");
-		ss = Integer.parseInt(sec[0]) + 1;
-
+		fps = DataCollector.getfps();
+		String duration = DataCollector.getDuration();
+		String[] split = duration.split(":");
+		hh = Integer.parseInt(split[0]);
+		mm = Integer.parseInt(split[1]);
+		ss = Integer.parseInt(split[2]);
+		
 		// More manipulation to figure out the frames
 		int startlength = start * fps;
-		int lastframe = (ss * fps) + (mm * 60 * fps) + (hh * 60 * fps);
+		int lastframe = (ss * fps) + (mm * 60 * fps) + (hh * 60 * 60 * fps);
 		int endlength = end * fps;
 		int endframe = lastframe - endlength;
 

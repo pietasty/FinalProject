@@ -30,8 +30,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
-import functionality.FileChecker;
-import functionality.ScreenShot;
+import functionality.helpers.FileChecker;
+import functionality.video.ScreenShot;
 import vamix.Main;
 
 import java.awt.event.HierarchyBoundsAdapter;
@@ -235,18 +235,9 @@ public class Playback extends JPanel {
 					int min = time / 60;
 					int minute = min % 60;
 					int hour = min / 60;
-					String h = Integer.toString(hour);
-					String m = Integer.toString(minute);
-					String s = Integer.toString(second);
-					if (second < 10) {
-						s = "0" + s;
-					}
-					if (minute < 10) {
-						m = "0" + m;
-					}
-					if (hour < 10) {
-						h = "0" + h;
-					}
+					String h = String.format("%02d", hour);
+					String m = String.format("%02d", minute);
+					String s = String.format("%02d", second);
 					videoTimer.setText(h + ":" + m + ":" + s);
 				}
 			}

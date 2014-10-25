@@ -1,4 +1,4 @@
-package functionality;
+package functionality.audio;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,37 +12,29 @@ import javax.swing.SwingWorker;
 
 import vamix.Edit;
 import vamix.Main;
+import editPanes.OverLay;
 
 /**
- * Class that executes the flip commands
- * 
- * @author ywu591
- * 
+ * Swing Worker for the Overlay Audio function
  */
-public class FlipWorker extends SwingWorker<Integer, Void> {
+public class OverLayWorker extends SwingWorker<Integer, Void> {
 	private Process process;
-	private String output;
-	private int option;
+	private String infile;
+	private String outfile;
 
-	public FlipWorker(String output, int option) {
-		this.output = output;
-		this.option = option;
+	public OverLayWorker(String in, String out) {
+		infile = in;
+		outfile = out;
 	}
 
 	@Override
 	protected Integer doInBackground() throws Exception {
 		ProcessBuilder builder;
-
-		// The commands
-		if (option == 0) {
-			builder = new ProcessBuilder("avconv", "-i",
-					Main.getInstance().original.getAbsolutePath(), "-vf",
-					"vflip", "-strict", "experimental", "-y", output);
-		} else {
-			builder = new ProcessBuilder("avconv", "-i",
-					Main.getInstance().original.getAbsolutePath(), "-vf",
-					"hflip", "-strict", "experimental", "-y", output);
-		}
+		// The command
+		builder = new ProcessBuilder("avconv", "-i",
+				Main.getInstance().original.getAbsolutePath(), "-i", infile,
+				"-filter_complex", "amix=inputs=2", "-strict", "experimental",
+				"-y", outfile);
 
 		// Sets up the builder and process
 		builder.redirectErrorStream(true);
@@ -62,28 +54,32 @@ public class FlipWorker extends SwingWorker<Integer, Void> {
 		return process.waitFor();
 	}
 
-	// Updates the progress bar so the user knows that processes are going on
+	// Updates progress bar so the user knows that a process is running
 	protected void process(List<Void> chunks) {
-		Edit.getInstance().updateProgressBar(true, "Flipping Video");
+		Edit.getInstance().updateProgressBar(true, "Overlaying Audio");
 	}
 
-	// Reports to the user if flipping of video is done correctly or not
+	// Reports to the user based on if the user overlaid the audio successfully
+	// or not.
 	protected void done() {
 		try {
 			if (get() == 0) {
-				JOptionPane.showMessageDialog(null, "Flipping was Successful!");
-				Edit.getInstance().setOutputFile(output);
+				JOptionPane.showMessageDialog(null,
+						"Audio Overlayed Successfully!");
+				Edit.getInstance().setOutputFile(
+						OverLay.getInstance().getOutputFile());
 				Edit.getInstance().getVideo()
 						.playMedia(Edit.getInstance().getOutputFile());
 				Edit.getInstance().enableVideoButtons();
 			} else if (get() > 0) {
-				JOptionPane.showMessageDialog(null, "Could not Flip the video");
+				JOptionPane.showMessageDialog(null,
+						"Error occurred in Overlaying of Audio!");
 			}
 		} catch (InterruptedException | ExecutionException e) {
-			JOptionPane.showMessageDialog(null, "Could not Flip the video");
+			JOptionPane.showMessageDialog(null,
+					"Error occurred in Overlaying of Audio!");
 		}
 		Edit.getInstance().enableEditButtons(true);
 		Edit.getInstance().updateProgressBar(false, "");
 	}
-
 }

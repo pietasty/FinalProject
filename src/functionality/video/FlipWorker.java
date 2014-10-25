@@ -1,4 +1,4 @@
-package functionality;
+package functionality.video;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,17 +14,17 @@ import vamix.Edit;
 import vamix.Main;
 
 /**
- * Class that does the rotation of the video
+ * Class that executes the flip commands
  * 
  * @author ywu591
  * 
  */
-public class RotateWorker extends SwingWorker<Integer, Void> {
+public class FlipWorker extends SwingWorker<Integer, Void> {
 	private Process process;
 	private String output;
 	private int option;
 
-	public RotateWorker(String output, int option) {
+	public FlipWorker(String output, int option) {
 		this.output = output;
 		this.option = option;
 	}
@@ -32,29 +32,16 @@ public class RotateWorker extends SwingWorker<Integer, Void> {
 	@Override
 	protected Integer doInBackground() throws Exception {
 		ProcessBuilder builder;
-		int number = 0;
-		// based on what option they picked it does the command
-		if (option == 0) {
-			number = 1;
-		} else if (option == 2) {
-			number = 2;
-		} else if (option == 3) {
-			number = 3;
-		} else if (option == 4) {
-			number = 0;
-		}
 
 		// The commands
-		if (option == 1) {
+		if (option == 0) {
 			builder = new ProcessBuilder("avconv", "-i",
 					Main.getInstance().original.getAbsolutePath(), "-vf",
-					"transpose=1,transpose=1", "-strict", "experimental", "-y",
-					output);
+					"vflip", "-strict", "experimental", "-y", output);
 		} else {
 			builder = new ProcessBuilder("avconv", "-i",
 					Main.getInstance().original.getAbsolutePath(), "-vf",
-					"transpose=" + number, "-strict", "experimental", "-y",
-					output);
+					"hflip", "-strict", "experimental", "-y", output);
 		}
 
 		// Sets up the builder and process
@@ -77,24 +64,23 @@ public class RotateWorker extends SwingWorker<Integer, Void> {
 
 	// Updates the progress bar so the user knows that processes are going on
 	protected void process(List<Void> chunks) {
-		Edit.getInstance().updateProgressBar(true, "Rotating");
+		Edit.getInstance().updateProgressBar(true, "Flipping Video");
 	}
 
-	// Reports to the user if the rotation of the video is done correctly or not
+	// Reports to the user if flipping of video is done correctly or not
 	protected void done() {
 		try {
 			if (get() == 0) {
-				JOptionPane.showMessageDialog(null, "Rotation was Successful!");
+				JOptionPane.showMessageDialog(null, "Flipping was Successful!");
 				Edit.getInstance().setOutputFile(output);
 				Edit.getInstance().getVideo()
 						.playMedia(Edit.getInstance().getOutputFile());
 				Edit.getInstance().enableVideoButtons();
 			} else if (get() > 0) {
-				JOptionPane.showMessageDialog(null,
-						"Could not rotate the video");
+				JOptionPane.showMessageDialog(null, "Could not Flip the video");
 			}
 		} catch (InterruptedException | ExecutionException e) {
-			JOptionPane.showMessageDialog(null, "Could not rotate the video");
+			JOptionPane.showMessageDialog(null, "Could not Flip the video");
 		}
 		Edit.getInstance().enableEditButtons(true);
 		Edit.getInstance().updateProgressBar(false, "");

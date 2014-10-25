@@ -54,7 +54,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.JComboBox;
 
-import functionality.FileChecker;
+import functionality.helpers.FileChecker;
 
 /**
  * Class for Text panel.

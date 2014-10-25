@@ -18,6 +18,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Extract extends JPanel {
 	private static Extract instance;
@@ -38,6 +40,9 @@ public class Extract extends JPanel {
 	private JTextField endhh;
 	private JTextField endmm;
 	private JTextField endss;
+	
+	//This fields allows me to go through each field and check instead of checking one by one.
+	private List<JTextField> timeFields;
 
 	private JLabel time;
 
@@ -58,7 +63,9 @@ public class Extract extends JPanel {
 		defaultlocation = file.substring(0, file.lastIndexOf('/') + 1);
 		setSize(420, 180);
 		setLayout(null);
-
+		
+		timeFields = new ArrayList<JTextField>();
+		
 		createLabels();
 		setOutput();
 		setCheckBox();
@@ -138,39 +145,45 @@ public class Extract extends JPanel {
 	private void setTimeTextFields() {
 		starthh = new JTextField();
 		restrictTextField(starthh);
-		starthh.setBounds(12, 108, 30, 19);
+		starthh.setBounds(12, 108, 30, 25);
 		starthh.setText("00");
 		add(starthh);
+		timeFields.add(starthh);
 
 		startmm = new JTextField();
 		restrictTextField(startmm);
-		startmm.setBounds(54, 108, 30, 19);
+		startmm.setBounds(54, 108, 30, 25);
 		startmm.setText("00");
 		add(startmm);
+		timeFields.add(startmm);
 
 		startss = new JTextField();
 		restrictTextField(startss);
-		startss.setBounds(100, 108, 30, 19);
+		startss.setBounds(100, 108, 30, 25);
 		startss.setText("00");
 		add(startss);
+		timeFields.add(startss);
 
 		endhh = new JTextField();
 		restrictTextField(endhh);
-		endhh.setBounds(209, 108, 30, 19);
+		endhh.setBounds(209, 108, 30, 25);
 		endhh.setText("00");
 		add(endhh);
+		timeFields.add(endhh);
 
 		endmm = new JTextField();
 		restrictTextField(endmm);
-		endmm.setBounds(251, 108, 30, 19);
+		endmm.setBounds(251, 108, 30, 25);
 		endmm.setText("00");
 		add(endmm);
+		timeFields.add(endmm);
 
 		endss = new JTextField();
 		restrictTextField(endss);
-		endss.setBounds(294, 108, 30, 19);
+		endss.setBounds(294, 108, 30, 25);
 		endss.setText("00");
 		add(endss);
+		timeFields.add(endss);
 	}
 
 	// Toggles on and off the advance options of specifying a time
@@ -207,24 +220,12 @@ public class Extract extends JPanel {
 	 * Checks if the user gave a valid format for time
 	 */
 	private boolean checkValidTime() {
-		// Checks they entered two digits.
-		if (starthh.getText().length() != 2 || startmm.getText().length() != 2
-				|| startss.getText().length() != 2
-				|| endhh.getText().length() != 2
-				|| endmm.getText().length() != 2
-				|| endss.getText().length() != 2) {
-			return false;
-			// Checks that none of the numbers are greater than 60
-		} else if (Integer.parseInt(starthh.getText()) > 60
-				|| Integer.parseInt(startmm.getText()) > 60
-				|| Integer.parseInt(startss.getText()) > 60
-				|| Integer.parseInt(endhh.getText()) > 60
-				|| Integer.parseInt(endmm.getText()) > 60
-				|| Integer.parseInt(endss.getText()) > 60) {
-			return false;
-		} else {
-			return true;
+		for (JTextField jtf : timeFields){
+			if (Integer.parseInt(jtf.getText()) > 60){
+				return false;
+			} 
 		}
+		return true;
 	}
 
 	/**
@@ -277,6 +278,13 @@ public class Extract extends JPanel {
 		if (!(fullname.charAt(fullname.length() - 4) == '.')) {
 			fullname = fullname + ".mp3";
 		}
+		
+		//if the user does not enter a time for a field assume it is zero
+		for(JTextField jtf : timeFields){
+			if(jtf.getText().trim().equals("")){
+				jtf.setText("0");
+			}
+		}
 
 		// Needs to give an output filename.
 		if (output.getText().trim().equals("")) {
@@ -289,7 +297,7 @@ public class Extract extends JPanel {
 			JOptionPane
 					.showMessageDialog(
 							null,
-							"Please enter a valid time between 0 and 60 \nand in the correct format",
+							"Please enter a valid time between 0 and 60",
 							"Error!", JOptionPane.ERROR_MESSAGE);
 			return false;
 			// Checks Their math is correct.
@@ -334,8 +342,10 @@ public class Extract extends JPanel {
 
 	// Returns the start time
 	public String getStartTime() {
-		return starthh.getText() + ":" + startmm.getText() + ":"
-				+ startss.getText();
+		String h = String.format("%02d", Integer.parseInt(starthh.getText()));
+		String m = String.format("%02d", Integer.parseInt(startmm.getText()));
+		String s = String.format("%02d", Integer.parseInt(startss.getText()));
+		return h + ":" + m + ":"+ s;
 	}
 
 	// Returns how long user wants to extract for
@@ -347,18 +357,9 @@ public class Extract extends JPanel {
 				- Integer.parseInt(startmm.getText());
 		int toss = Integer.parseInt(endss.getText())
 				- Integer.parseInt(startss.getText());
-		String h = Integer.toString(tohh);
-		String m = Integer.toString(tomm);
-		String s = Integer.toString(toss);
-		if (toss < 10) {
-			s = "0" + s;
-		}
-		if (tomm < 10) {
-			m = "0" + m;
-		}
-		if (tohh < 10) {
-			h = "0" + h;
-		}
+		String h = String.format("%02d", tohh);
+		String m = String.format("%02d", tomm);
+		String s = String.format("%02d", toss);
 		return h + ":" + m + ":" + s;
 	}
 }
