@@ -39,6 +39,7 @@ import functionality.audio.ReplaceWorker;
 import functionality.helpers.CheckAudioTrack;
 import functionality.helpers.FileChecker;
 import functionality.subtitles.SubtitlesChecker;
+import functionality.subtitles.SubtitlesMerger;
 import functionality.subtitles.SubtitlesReader;
 import functionality.subtitles.SubtitlesWriter;
 import functionality.video.FadeWorker;
@@ -107,6 +108,7 @@ public class Edit extends JPanel {
 	
 	private JButton subtitles;
 	private SubtitlesReader reader;
+	private SubtitlesMerger merger;
 
 	public static Edit getInstance() {
 		if (instance == null) {
@@ -579,15 +581,18 @@ public class Edit extends JPanel {
 		subtitles.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				pressStopButton();
-				//TODO like check the file and like get the subtitles 
 				
+				//Checks if the video has a subtitle stream or not.
 				if (SubtitlesChecker.hasSubtitleStream()) {
+					//Warns the user if they want to load the subtitles from the stream or not
 					int m = JOptionPane.showConfirmDialog(
 									null,
 									"The video has a subtitles stream\n"
-											+ "Would you like to extract the subtitles from this stream?",
+											+ "Would you like to extract the subtitles from this stream?\n" +
+											"*Note* This will override the .ass file linked to the video",
 									"Subtitles", JOptionPane.YES_NO_OPTION,
 									JOptionPane.INFORMATION_MESSAGE);
+					//Extracts the subtitles from the stream if they select yes
 					if(m == 0){
 						reader = new SubtitlesReader();
 						reader.execute();
@@ -598,11 +603,11 @@ public class Edit extends JPanel {
 					} 
 				}
 				
+				//Checks if there is a .ass files associated with the video
 				if(SubtitlesChecker.hasSubtitlesFile()){
 					SubtitlesReader.readSubtitlesFile();
 					Subtitles.getInstance().updateGUI();
 				}
-				
 				
 				//Sets up the joptionpane for adding subtitles
 				String[] options = { "Save Subtitles ", "Add Stream"};
@@ -628,12 +633,15 @@ public class Edit extends JPanel {
 						newpanel.setPreferredSize(new Dimension(400,100));
 						String[] saveOptions = {"Ok","Cancel"};
 						boolean check = false;
+						//Check for valid input
 						while (!check){
 							int o = JOptionPane.showOptionDialog(null, newpanel,
 									"Saving", JOptionPane.YES_NO_OPTION,
 									JOptionPane.NO_OPTION, null, saveOptions, saveOptions[0]);
 							if (o == 0){
 								check = SubtitlesSave.getInstance().doProcess();
+								status = check;
+								video = check;
 							} else {
 								break;
 							}
@@ -647,8 +655,11 @@ public class Edit extends JPanel {
 						SubtitlesWriter.writeSubtitles();
 						//TODO If they want to get the video! =DDDDDDDDDD
 						if(video){
-							
+							System.out.println("yes?");
+							merger = new SubtitlesMerger();
+							merger.execute();
 						}
+						enableEditButtons(true);
 					}
 				}
 				

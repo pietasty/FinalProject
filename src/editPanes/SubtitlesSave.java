@@ -129,9 +129,12 @@ public class SubtitlesSave extends JPanel {
 					return false;
 				}
 			}
-
 			return true;
 		}
+	}
+	
+	public String getOutputFile(){
+		return fullname;
 	}
 
 }

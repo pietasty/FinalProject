@@ -216,27 +216,7 @@ public class Subtitles extends JPanel {
 		add = new JButton("Add Subtitles");
 		add.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Assumes that if there is no input for time inputs, the value is 0
-				for(JTextField jtf : timeFields){
-					if(jtf.getText().trim().equals("")){
-						jtf.setText("00");
-					}
-				}
-				//Checks if time is between 0 and 59
-				if (!checkValidTime()){
-					JOptionPane.showMessageDialog(
-							null,
-							"Please enter a valid time between 0 and 60",
-							"Error!", JOptionPane.ERROR_MESSAGE);
-				//Checks that the start time is a earlier time than the end time
-				} else if (!checkValidMath()){
-					JOptionPane.showMessageDialog(null, "Your math is horrible\n" +
-							"The start time can't be a later time than the end time",
-							"Error!", JOptionPane.ERROR_MESSAGE);
-				} else if(textArea.getText().trim().equals("")){
-					JOptionPane.showMessageDialog(null, "Please enter subtitles to add",
-							"Error!", JOptionPane.ERROR_MESSAGE);
-				} else {
+				if(addSubtitlesErrorChecking()){
 					String start = formatTime(starthh.getText(),startmm.getText(),startss.getText());
 					String end = formatTime(endhh.getText(),endmm.getText(),endss.getText());
 					model.addRow(new Object[]{start,end,textArea.getText()});
@@ -262,8 +242,7 @@ public class Subtitles extends JPanel {
 		add(delete);
 	}
 	
-	//TODO
-	private void addEditButton(){
+	private void addEditButton() {
 		edit = new JButton("Edit Subtitles");
 		edit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -286,18 +265,22 @@ public class Subtitles extends JPanel {
 		edit.setBounds(300, 252, 130, 25);
 		edit.setEnabled(false);
 		add(edit);
-		
+
 		savechanges = new JButton("Save changes");
 		savechanges.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int row = table.getSelectedRow();
-				String start = formatTime(starthh.getText(),startmm.getText(),startss.getText());
-				String end = formatTime(endhh.getText(),endmm.getText(),endss.getText());
-				model.setValueAt(start, row, 0);
-				model.setValueAt(end, row, 1);
-				model.setValueAt(textArea.getText(), row, 2);
-				setupTextFields();
-				savechanges.setEnabled(false);
+				if (addSubtitlesErrorChecking()) {
+					int row = table.getSelectedRow();
+					String start = formatTime(starthh.getText(),
+							startmm.getText(), startss.getText());
+					String end = formatTime(endhh.getText(), endmm.getText(),
+							endss.getText());
+					model.setValueAt(start, row, 0);
+					model.setValueAt(end, row, 1);
+					model.setValueAt(textArea.getText(), row, 2);
+					setupTextFields();
+					savechanges.setEnabled(false);
+				}
 			}
 		});
 		savechanges.setBounds(158, 252, 130, 25);
@@ -368,6 +351,35 @@ public class Subtitles extends JPanel {
 		return true;
 	}
 	
+	private boolean addSubtitlesErrorChecking(){
+		//Assumes that if there is no input for time inputs, the value is 0
+		for(JTextField jtf : timeFields){
+			if(jtf.getText().trim().equals("")){
+				jtf.setText("00");
+			}
+		}
+		//Checks if time is between 0 and 59
+		if (!checkValidTime()){
+			JOptionPane.showMessageDialog(
+					null,
+					"Please enter a valid time between 0 and 60",
+					"Error!", JOptionPane.ERROR_MESSAGE);
+			return false;
+		//Checks that the start time is a earlier time than the end time
+		} else if (!checkValidMath()){
+			JOptionPane.showMessageDialog(null, "Your math is horrible\n" +
+					"The start time can't be a later time than the end time",
+					"Error!", JOptionPane.ERROR_MESSAGE);
+			return false;
+		} else if(textArea.getText().trim().equals("")){
+			JOptionPane.showMessageDialog(null, "Please enter subtitles to add",
+					"Error!", JOptionPane.ERROR_MESSAGE);
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
 	/**
 	 * This method checks if the user has actually added subtitles or not 
 	 * (mainly from the fact that if the JTable has a row or not).
@@ -415,6 +427,10 @@ public class Subtitles extends JPanel {
 	}
 	
 	public void updateGUI(){
+		for (int i = model.getRowCount() - 1; i >= 0; i--) {
+		    model.removeRow(i);
+		}
+		
 		List<String> startTime = SubtitlesReader.getStartTime();
 		List<String> endTime = SubtitlesReader.getEndTime();
 		List<String> text = SubtitlesReader.getText();

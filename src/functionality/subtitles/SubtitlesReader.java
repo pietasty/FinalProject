@@ -24,9 +24,9 @@ import vamix.Main;
 public class SubtitlesReader extends SwingWorker<Integer, Void> {
 	private Process process;
 	
-	private static List<String> startTime = new ArrayList<String>();
-	private static List<String> endTime = new ArrayList<String>();
-	private static List<String> text = new ArrayList<String>();
+	private static List<String> startTime;
+	private static List<String> endTime;
+	private static List<String> text;
 	
 
 	@Override
@@ -74,6 +74,9 @@ public class SubtitlesReader extends SwingWorker<Integer, Void> {
 		String extensionless = mainFile.substring(0,
 				mainFile.lastIndexOf('.') + 1);
 		String assFile = extensionless + "ass";
+		startTime = new ArrayList<String>();
+		endTime = new ArrayList<String>();
+		text = new ArrayList<String>();
 		
 		try {
 			reader = new BufferedReader(new FileReader(assFile));
@@ -87,7 +90,6 @@ public class SubtitlesReader extends SwingWorker<Integer, Void> {
 			}
 			String format = reader.readLine();
 			String[] split = format.split(",");
-			System.out.println(format);
 			int start = 0;
 			int end = 0;
 			int word = 0;
@@ -104,11 +106,7 @@ public class SubtitlesReader extends SwingWorker<Integer, Void> {
 			}
 			
 			while((line = reader.readLine()) != null){
-				System.out.println(line);
 				String[] divide = line.split(",");
-				for(String s: divide){
-					System.out.println(s);
-				}
 				startTime.add(divide[start]);
 				endTime.add(divide[end]);
 				text.add(divide[word]);
