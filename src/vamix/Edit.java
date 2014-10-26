@@ -313,7 +313,8 @@ public class Edit extends JPanel {
 		});
 		chooser.setSize(135, 32);
 		add(chooser);
-
+		
+		//
 		filenameLabel = new JLabel("");
 		filenameLabel.setSize(429, 25);
 		add(filenameLabel);
@@ -378,7 +379,7 @@ public class Edit extends JPanel {
 		setIcon(forward, Main.FORWARDPIC);
 		forward.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				video.skip(10000);
+				video.skip(5000);
 			}
 		});
 		forward.setEnabled(false);
@@ -389,7 +390,7 @@ public class Edit extends JPanel {
 		setIcon(back, Main.BACKPIC);
 		back.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				video.skip(-10000);
+				video.skip(-5000);
 			}
 		});
 		back.setEnabled(false);
@@ -574,8 +575,7 @@ public class Edit extends JPanel {
 
 	}
 	
-	
-	//TODO subtitles! =D
+	//Adds the subtitles button
 	private void addSubtitles(){
 		subtitles = new JButton("Add Subtitles");
 		subtitles.addActionListener(new ActionListener() {
@@ -614,7 +614,7 @@ public class Edit extends JPanel {
 				JPanel panel = Subtitles.getInstance();
 				panel.setPreferredSize(new Dimension(600, 300));
 				boolean status = false;
-				boolean video = false;
+				boolean stream = false;
 				
 				// Checks for valid input
 				while (!status) {
@@ -641,7 +641,7 @@ public class Edit extends JPanel {
 							if (o == 0){
 								check = SubtitlesSave.getInstance().doProcess();
 								status = check;
-								video = check;
+								stream = check;
 							} else {
 								break;
 							}
@@ -653,13 +653,16 @@ public class Edit extends JPanel {
 					if (status) {
 						enableEditButtons(false);
 						SubtitlesWriter.writeSubtitles();
-						//TODO If they want to get the video! =DDDDDDDDDD
-						if(video){
+						if(stream){
 							System.out.println("yes?");
 							merger = new SubtitlesMerger();
 							merger.execute();
+						} else {
+							enableEditButtons(true);
+							enableVideoButtons();
+							outputFile = Main.getInstance().original.getAbsolutePath();
+							video.playMedia(outputFile);
 						}
-						enableEditButtons(true);
 					}
 				}
 				
@@ -748,21 +751,35 @@ public class Edit extends JPanel {
 		hasAudioTrack = CheckAudioTrack
 				.checkAudioTrack(Main.getInstance().original.getAbsolutePath());
 	}
-
+	
+	/**
+	 * enables the progressbar
+	 * @param b enable progressBar
+	 * @param s String you want to display
+	 */
 	public void updateProgressBar(boolean b,String s) {
 		progressBar.setIndeterminate(b);
 		progressBar.setStringPainted(b);
 		progressBar.setString(s);
 	}
 
+	/**
+	 * Returns the video player
+	 */
 	public EmbeddedMediaPlayer getVideo() {
 		return video;
 	}
 
+	/**
+	 * Sets the outputFile name 
+	 */
 	public void setOutputFile(String out) {
 		outputFile = out;
 	}
-
+	
+	/**
+	 * Returns the outputFile
+	 */
 	public String getOutputFile() {
 		return outputFile;
 	}

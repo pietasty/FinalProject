@@ -825,8 +825,6 @@ public class Text extends JPanel {
 			String line;
 			Matcher matcher;
 			while ((line = stdout.readLine()) != null && !isCancelled()) {
-				//TODO why does text not work???? so the confused lol gg
-				System.out.println(line);
 				// match pattern time=000.00
 				matcher = Pattern.compile("time=\\d+.\\d+").matcher(line);
 				if (matcher.find()) {
@@ -986,6 +984,9 @@ public class Text extends JPanel {
 					return;
 				}
 			}
+			if(framerate == null){
+				framerate = "24";
+			}
 			printMetadata.destroy(); // kill process
 		}
 
@@ -1074,7 +1075,7 @@ public class Text extends JPanel {
 
 		forward.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				video.skip(10000);
+				video.skip(5000);
 			}
 		});
 
@@ -1088,7 +1089,7 @@ public class Text extends JPanel {
 
 		back.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				video.skip(-1000);
+				video.skip(-5000);
 			}
 		});
 

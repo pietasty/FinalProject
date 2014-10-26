@@ -79,6 +79,7 @@ public class Main extends JFrame {
 		});
 	}
 	
+	// Sets the look and feel of the whole GUI
 	private void setLookAndFeel(){
 		try {
 			UIManager.setLookAndFeel(new NimbusLookAndFeel());

@@ -6,6 +6,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+/**
+ * This class is the GUI for the tabbed panes.
+ * @author ywu591
+ *
+ */
 public class VamixTabs extends JTabbedPane {
 	private static VamixTabs instance;
 	
@@ -22,6 +27,7 @@ public class VamixTabs extends JTabbedPane {
 		this.add("Editor", Edit.getInstance());
 		this.add("Text", Text.getInstance());
 		this.add("Download", Download.getInstance());
+		this.add("Help",Help.getInstance());
 		
 		//Deals with events when 
 		this.addChangeListener(new ChangeListener() {
