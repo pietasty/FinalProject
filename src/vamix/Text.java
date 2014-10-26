@@ -99,6 +99,7 @@ public class Text extends JPanel {
 	private JEditorPane endText = new JEditorPane();
 	private JProgressBar progress = new JProgressBar(); // initialize a progress
 														// bar
+	private JButton loadProject;
 	private File outputFile;
 	private File settingsFile = new File(System.getProperty("user.home")
 			+ "/.vamixsettings");
@@ -510,7 +511,7 @@ public class Text extends JPanel {
 		loadPanel.setLayout(new BorderLayout());
 		loadPanel.setVisible(true);
 		loadPanel.setMaximumSize(new Dimension(300, 45));
-		JButton loadProject = new JButton("Load project");
+		loadProject = new JButton("Load project");
 		// disable load button if no save file exists
 		if (!settingsFile.exists()) {
 			loadProject.setEnabled(false);
@@ -596,6 +597,7 @@ public class Text extends JPanel {
 					writeSave.close(); // close PrintWriter
 					JOptionPane.showMessageDialog(null,
 							"Project settings saved successfully!");
+					loadProject.setEnabled(true);
 				} catch (FileNotFoundException | UnsupportedEncodingException e1) {
 					// show error message for caught exception.
 					JOptionPane.showMessageDialog(null,
