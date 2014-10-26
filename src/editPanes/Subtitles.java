@@ -82,20 +82,24 @@ public class Subtitles extends JPanel {
 		addEditButton();
 	}
 	
+	//Adds the JTable
 	private void addTable(){
 		String[] columnNames = {"Start","End", "Text"};
 		int rows = 0;
 		
 		//Reference: http://www.java2s.com/Code/Java/Swing-JFC/DisablingUserEditsinaJTablewithDefaultTableModel.htm
+		// Disables editting with the tables
 		model = new DefaultTableModel(rows,columnNames.length){
 		      public boolean isCellEditable(int rowIndex, int mColIndex) {
 			        return false;
 			      }
 		};
+		//Adds the columns to the Jtable
 		model.setColumnIdentifiers(columnNames);
 		table = new JTable(model);
 		
 		//Reference:http://stackoverflow.com/questions/4399975/jtable-no-selected-row
+		// Enable delete and edit buttons when a row is selected
 		ListSelectionModel listSelectionModel = table.getSelectionModel();
 		listSelectionModel.addListSelectionListener(new ListSelectionListener() {
 		        public void valueChanged(ListSelectionEvent e) { 
@@ -106,6 +110,7 @@ public class Subtitles extends JPanel {
 		});
 		
 		//Reference: http://stackoverflow.com/questions/953972/java-jtable-setting-column-width
+		//Sets the width of columns
 		table.getColumnModel().getColumn(0).setPreferredWidth(72);
 		table.getColumnModel().getColumn(1).setPreferredWidth(72);
 		table.getColumnModel().getColumn(2).setPreferredWidth(154);
@@ -115,6 +120,7 @@ public class Subtitles extends JPanel {
 		add(tablePanel);
 	}
 	
+	//Adds all the label in the GUI
 	private void addLabels(){
 		JLabel lblSubtitles = new JLabel("Subtitles");
 		lblSubtitles.setFont(new Font("Dialog", Font.PLAIN, 20));
@@ -163,6 +169,7 @@ public class Subtitles extends JPanel {
 		add(colon3);
 	}
 	
+	//Adds the textArea
 	private void addTextArea(){
 		textArea = new JEditorPane();
 		textArea.setBounds(12, 177, 276, 63);
@@ -172,6 +179,7 @@ public class Subtitles extends JPanel {
 		add(textArea);
 	}
 	
+	//Adds the time fields
 	private void addTimeFields(){
 		starthh = new JTextField();
 		starthh.setBounds(123, 49, 30, 25);
@@ -210,12 +218,14 @@ public class Subtitles extends JPanel {
 		timeFields.add(endss);
 	}
 	
-	//TODO
+	//This button allows users to add subtitles to the video
 	private void addAddButton(){
 		add = new JButton("Add Subtitles");
 		add.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//Checks if there is errors with the input
 				if(addSubtitlesErrorChecking()){
+					//If not errors add subtitles to the jtable
 					String start = formatTime(starthh.getText(),startmm.getText(),startss.getText());
 					String end = formatTime(endhh.getText(),endmm.getText(),endss.getText());
 					model.addRow(new Object[]{start,end,textArea.getText()});
@@ -228,6 +238,7 @@ public class Subtitles extends JPanel {
 		add(add);
 	}
 	
+	//This button allows the user to delete a selected row
 	private void addDeleteButton(){
 		delete = new JButton("Delete Subtitles");
 		delete.addActionListener(new ActionListener() {
@@ -241,10 +252,12 @@ public class Subtitles extends JPanel {
 		add(delete);
 	}
 	
+	//This button allows the user to edit the subtitles in the table
 	private void addEditButton() {
 		edit = new JButton("Edit Subtitles");
 		edit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//Updates the fields 
 				int row = table.getSelectedRow();
 				String start = (String) model.getValueAt(row, 0);
 				String end = (String) model.getValueAt(row, 1);
@@ -264,7 +277,8 @@ public class Subtitles extends JPanel {
 		edit.setBounds(300, 252, 130, 25);
 		edit.setEnabled(false);
 		add(edit);
-
+		
+		//This button allows the user to save the edited changes
 		savechanges = new JButton("Save changes");
 		savechanges.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -287,6 +301,7 @@ public class Subtitles extends JPanel {
 		add(savechanges);
 	}
 	
+	//This method initialises the input textFields
 	private void setupTextFields(){
 		starthh.setText("00");
 		startmm.setText("00");
@@ -297,6 +312,7 @@ public class Subtitles extends JPanel {
 		textArea.setText("");
 	}
 	
+	//Restricts the textFields for time input
 	private void restrictTextField(JTextField jtf) {
 		jtf.setDocument(new JTextFieldLimit(2));
 		jtf.addKeyListener(new KeyAdapter() {
@@ -312,6 +328,7 @@ public class Subtitles extends JPanel {
 		});
 	}
 	
+	//This method formats time to a hh:mm:ss
 	private String formatTime(String hh, String mm, String ss){
 		String h = String.format("%02d", Integer.parseInt(hh));
 		String m = String.format("%02d", Integer.parseInt(mm));
@@ -319,9 +336,7 @@ public class Subtitles extends JPanel {
 		return h + ":" + m + ":"+ s;
 	}
 	
-	/**
-	 * Checks if the user gave a valid format for time
-	 */
+	//Checks if the user gave a valid format for time
 	private boolean checkValidTime() {
 		for (JTextField jtf : timeFields){
 			if (Integer.parseInt(jtf.getText()) > 60){
@@ -330,10 +345,8 @@ public class Subtitles extends JPanel {
 		}
 		return true;
 	}
-
-	/**
-	 * Checks if the user gave the starting time to be less than the ending time
-	 */
+	
+	//Checks if the user gave the starting time to be less than the ending time
 	private boolean checkValidMath() {
 		int start = 0;
 		int end = 0;
@@ -350,6 +363,7 @@ public class Subtitles extends JPanel {
 		return true;
 	}
 	
+	//This method checks if the user gave valid inputs for adding subtitles
 	private boolean addSubtitlesErrorChecking(){
 		//Assumes that if there is no input for time inputs, the value is 0
 		for(JTextField jtf : timeFields){
@@ -370,6 +384,7 @@ public class Subtitles extends JPanel {
 					"The start time can't be a later time than the end time",
 					"Error!", JOptionPane.ERROR_MESSAGE);
 			return false;
+		//Checks if the user has entered subtitles to add or not
 		} else if(textArea.getText().trim().equals("")){
 			JOptionPane.showMessageDialog(null, "Please enter subtitles to add",
 					"Error!", JOptionPane.ERROR_MESSAGE);
@@ -425,6 +440,9 @@ public class Subtitles extends JPanel {
 		return output;
 	}
 	
+	/**
+	 * This method updates the JTable when reading in a .ass file
+	 */
 	public void updateGUI(){
 		for (int i = model.getRowCount() - 1; i >= 0; i--) {
 		    model.removeRow(i);

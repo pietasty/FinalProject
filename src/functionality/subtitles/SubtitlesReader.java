@@ -67,13 +67,20 @@ public class SubtitlesReader extends SwingWorker<Integer, Void> {
 	protected void done(){
 		Edit.getInstance().updateProgressBar(false, "Getting Subtitles");
 	}
-
+	
+	/**
+	 * This method reads the .ass file and stores the start times, end times and the text into a list.
+	 * To return the lists call, getStartTimes(),getEndTimes(),getText().
+	 * Call this method first before getting the list please.
+	 */
 	public static void readSubtitlesFile() {
 		BufferedReader reader;
+		//Finds the .ass file
 		String mainFile = Main.getInstance().original.getAbsolutePath();
 		String extensionless = mainFile.substring(0,
 				mainFile.lastIndexOf('.') + 1);
 		String assFile = extensionless + "ass";
+		//Initialise the lists
 		startTime = new ArrayList<String>();
 		endTime = new ArrayList<String>();
 		text = new ArrayList<String>();
@@ -81,13 +88,14 @@ public class SubtitlesReader extends SwingWorker<Integer, Void> {
 		try {
 			reader = new BufferedReader(new FileReader(assFile));
 			String line = null;
-			//Finds the write place to start reading for subtitles.
+			//Finds the right place to start reading for subtitles.
 			while ((line = reader.readLine()) != null) {
 				if(line.equals("[Events]")){
 					break;
 				}
 				
 			}
+			//Finds the places where start times , end times and text is
 			String format = reader.readLine();
 			String[] split = format.split(",");
 			int start = 0;
@@ -104,7 +112,7 @@ public class SubtitlesReader extends SwingWorker<Integer, Void> {
 					word = i;
 				}
 			}
-			
+			//Reads the start times, end times and text and puts them into the list
 			while((line = reader.readLine()) != null){
 				String[] divide = line.split(",");
 				startTime.add(divide[start]);

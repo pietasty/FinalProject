@@ -19,6 +19,8 @@ import vamix.Main;
  */
 public class SubtitlesWriter {
 	private static File f;
+	
+	//This is the initial part of a .ass file
 	private static final String[] assFormat = {
 			"[Script Info]",
 			"ScriptType: v4.00+",
@@ -38,24 +40,28 @@ public class SubtitlesWriter {
 				mainFile.lastIndexOf('.') + 1);
 		String assFile = extensionless + "ass";
 		f = new File(assFile);
-
+		
+		//Gets a list of start times, end times and text from the Jtable in Subtitles class.
 		List<String> startTimes = Subtitles.getInstance().getStartTimes();
 		List<String> endTimes = Subtitles.getInstance().getEndTimes();
 		List<String> text = Subtitles.getInstance().getText();
 
 		try {
-			
+			//First delete any existing .ass file
 			deleteSubtitlesFile();
 			
+			//Then creates a new .ass file
 			f.createNewFile();
 			
 			PrintWriter writer = new PrintWriter(new BufferedWriter(
 					new FileWriter(f.getAbsolutePath(), true)));
 			
+			//Write the initial format of a .ass file
 			for (String s : assFormat) {
 				writer.println(s);
 			}
-
+			
+			//Then append the Subtitles to the bottom
 			for (int i = 0; i < startTimes.size(); i++) {
 				String s = "Dialogue: 0,";
 				s = s + startTimes.get(i) + ".00,";
@@ -69,6 +75,9 @@ public class SubtitlesWriter {
 		}
 	}
 	
+	/**
+	 * Deletes any existing .ass file associated with the video.
+	 */
 	public static void deleteSubtitlesFile(){
 		String mainFile = Main.getInstance().original.getAbsolutePath();
 		String extensionless = mainFile.substring(0,

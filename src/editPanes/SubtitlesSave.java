@@ -41,6 +41,7 @@ public class SubtitlesSave extends JPanel {
 		setSize(400,100);
 		setLayout(null);
 		
+		//Defaultlocation is always where the original file is located
 		String file = Main.getInstance().original.getAbsolutePath();
 		defaultlocation = file.substring(0, file.lastIndexOf('/') + 1);
 		
@@ -75,7 +76,7 @@ public class SubtitlesSave extends JPanel {
 		add(save);
 	}
 	
-	
+	//Checks that the user is not o
 	private boolean checkOverrideOriginal() {
 		if (Main.getInstance().original.getAbsolutePath().equals(fullname)) {
 			return true;
@@ -83,7 +84,9 @@ public class SubtitlesSave extends JPanel {
 		return false;
 	}
 	
-	
+	/**
+	 * This method checks that the user has given the correct outputFile name
+	 */
 	public boolean doProcess() {
 		// If a name was given but did not use fileChooser then file is
 		// stored in default location
@@ -133,6 +136,9 @@ public class SubtitlesSave extends JPanel {
 		}
 	}
 	
+	/**
+	 * Returns the outputFile name that the user has picked
+	 */
 	public String getOutputFile(){
 		return fullname;
 	}

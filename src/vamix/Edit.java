@@ -184,7 +184,7 @@ public class Edit extends JPanel {
 			}
 		});
 		extractAudio.setEnabled(false);
-		extractAudio.setBounds(462,387,135, 25);
+		extractAudio.setBounds(756,276,135, 25);
 		add(extractAudio);
 
 		replaceAudio = new JButton("Replace Audio");
@@ -227,7 +227,7 @@ public class Edit extends JPanel {
 			}
 		});
 		replaceAudio.setEnabled(false);
-		replaceAudio.setBounds(609,387,135, 25);
+		replaceAudio.setBounds(756,313,135, 25);
 		add(replaceAudio);
 
 		overlayAudio = new JButton("Overlay Audio");
@@ -269,7 +269,7 @@ public class Edit extends JPanel {
 			}
 		});
 		overlayAudio.setEnabled(false);
-		overlayAudio.setBounds(756,387,135, 25);
+		overlayAudio.setBounds(756,350,135, 25);
 		add(overlayAudio);
 	}
 
@@ -668,7 +668,7 @@ public class Edit extends JPanel {
 				
 			}
 		});
-		subtitles.setBounds(756, 313, 135, 25);
+		subtitles.setBounds(756, 387, 135, 25);
 		subtitles.setEnabled(false);
 		add(subtitles);
 	}
@@ -789,9 +789,9 @@ public class Edit extends JPanel {
 		int x = Main.getInstance().getWidth();
 		int y = Main.getInstance().getHeight();
 
-		extractAudio.setLocation(x - 438, y - 113);
-		replaceAudio.setLocation(x - 291, y - 113);
-		overlayAudio.setLocation(x - 144, y - 113);
+		extractAudio.setLocation(x - 144, y - 224);
+		replaceAudio.setLocation(x - 144, y - 187);
+		overlayAudio.setLocation(x - 144, y - 150);
 		chooser.setLocation(x - 623, y - 76);
 		filenameLabel.setLocation(x - 438, 12);
 		videoPanel.setSize(x - 500, y - 100);
@@ -815,5 +815,6 @@ public class Edit extends JPanel {
 		fadeout.setLocation(x - 253, 160);
 		fadeoutsec.setLocation(x - 180, 160);
 		fade.setLocation(x - 144, 160);
+		subtitles.setLocation(x-144, y-113);
 	}
 }

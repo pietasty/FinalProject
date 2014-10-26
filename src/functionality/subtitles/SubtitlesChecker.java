@@ -22,7 +22,7 @@ public class SubtitlesChecker extends SwingWorker<Integer, Void> {
 	private static SubtitlesChecker checker;
 	
 	private Process process;
-	
+
 	@Override
 	protected Integer doInBackground() throws Exception {
 		int output = 0;
@@ -42,19 +42,15 @@ public class SubtitlesChecker extends SwingWorker<Integer, Void> {
 			InputStream stdout = process.getInputStream();
 			BufferedReader stdoutBuffered = new BufferedReader(
 					new InputStreamReader(stdout));
-
 			String line = null;
 			while ((line = stdoutBuffered.readLine()) != null && !isCancelled()) {
 				if (line.contains("Subtitle")) {
 					output++;
 				}
 			}
-
 			stdoutBuffered.close();
 		} catch (IOException e) {
-
 		}
-
 		process.waitFor();
 		return output;
 	}
