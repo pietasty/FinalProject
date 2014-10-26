@@ -12,4 +12,91 @@ The button on the left mutes/unmutes the video
 The button on the right lets you adjust the volume
 
 There is also a camera button next to the choose file button. 
-The camera button allows you to 
+The camera button allows you to take a screen shot of the current playing video.
+The images are saved to where the video file is located.
+
+
+=============
+Editor
+=============
+
+To edit a video file make sure you have selected a file first.
+
+The player on the left is a preview player.
+Once you have performed a functionality you can view the changes you have made with the player.
+
+Basic functions:
+All Basic functions output files are saved to where the input video file is located
+
+Rotate -> Allows you to rotate the video based on a selected angle from the chooser.
+Flip -> Allows you to either vertically flip or horizontally flip the video.
+Fade -> Allows you to fade in from the start and fade out to the end for up to 59 seconds.
+
+Advance functions:
+All advance functions require you to enter an output name;
+
+Extract Audio 
+-> Takes out the audio from the video and saves it to a audio file.
+-> You can specify a part of the video to extract the audio from by unticking the "extract audio from whole file"
+
+Replace Audio
+-> Removes the current audio from the video and replaces it with an input audio track.
+-> Select an audio track with Choose File button
+-> Give a name for the output file. You can also change the location of where the output file is by using the Save To button
+
+Overlay Audio
+-> Merges the current audio from the video with an input audio track.
+-> Select an audio track with Choose File button
+-> Give a name for the output file. You can also change the location of where the output file is by using the Save To button
+
+Add Subtitles
+->The Table on the right shows a list of subtitles that are currently in video
+->The Area on the left allows you to add subtitles to the table
+
+->The add subtitles button adds subtitles to the table once input has been given for the start time, end time and text has been entered
+->The edit subtitles button allows you to edit a subtitles in the table.
+->The save changes button will save the edits you have made to a selected subtitle.
+->The delete subtitles button allows you to delete a subtitle from the table
+
+->The save subtitles button allows you to save all the subtitles into a .ass file that is named the same as the video. 
+   This will allow you to preview the subtitles using the player.
+   Note this .ass file has to be in the same directory for you to preview the subtitles.
+->The add stream button will add a subtitle stream to a video. 
+   Meaning that the .ass file does not need to be in the same dirctory as the video.
+
+
+============
+Text
+============
+
+This allows you to add opening and closing text a video.
+Once again the player is there to show you the end result.
+The Text under the player shows you what the text looks like when you adjust the font,size of the font and the colour of the text
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

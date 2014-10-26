@@ -13,6 +13,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.HierarchyBoundsAdapter;
+import java.awt.event.HierarchyEvent;
 
 /**
  * This is the GUI for the Help tab.
@@ -25,6 +27,7 @@ public class Help extends JPanel {
 	
 	private JTextArea editor;
 	private JScrollPane panel;
+	private JButton button;
 	private JDialog popup;
 	
 	public static Help getInstance(){
@@ -38,6 +41,12 @@ public class Help extends JPanel {
 		setSize(900,473);
 		setLayout(null);
 		
+		addHierarchyBoundsListener(new HierarchyBoundsAdapter() {
+			public void ancestorResized(HierarchyEvent e) {
+				resize();
+			}
+		});
+		
 		//Sets up the JTextArea and ScrollPane
 		editor = new JTextArea();
 		editor.setEditable(false);
@@ -50,8 +59,8 @@ public class Help extends JPanel {
 		add(panel);
 		
 		//Button that allows the user to pop out the help panel
-		JButton btnPopout = new JButton("Popout");
-		btnPopout.addActionListener(new ActionListener() {
+		button = new JButton("Popout");
+		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (popup == null) {
 					popup = new Popout();
@@ -60,8 +69,8 @@ public class Help extends JPanel {
 				}
 			}
 		});
-		btnPopout.setBounds(391, 400, 117, 25);
-		add(btnPopout);
+		button.setBounds(391, 400, 117, 25);
+		add(button);
 	}
 	
 	// This method reads the help file and appends the text to a JTextArea
@@ -81,6 +90,14 @@ public class Help extends JPanel {
 			jta.setCaretPosition(0);
 		} catch (IOException e) {
 		}
+	}
+	
+	private void resize(){
+		int x = Main.getInstance().getWidth();
+		int y = Main.getInstance().getHeight();
+		
+		panel.setSize(x -12, y -124);
+		button.setLocation(x/2 -59, y-100);
 	}
 	
 	//Class that allows the help panel to pop out;

@@ -36,7 +36,7 @@ public class SubtitlesMerger extends SwingWorker<Integer,Void>{
 		
 		// The commands
 		ProcessBuilder builder;
-		builder = new ProcessBuilder("avconv","-i",mainFile,"-i",assFile,output);
+		builder = new ProcessBuilder("avconv","-i",mainFile,"-i",assFile,"-y",output);
 
 
 		// Sets up the builder and process
