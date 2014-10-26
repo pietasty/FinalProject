@@ -236,7 +236,7 @@ public class Text extends JPanel {
 				// open file chooser in new window
 				JFileChooser fileSelector = new JFileChooser();
 				File f = Main.getInstance().original;
-				if (f != null) {
+				if (f != null && f.exists()) {
 					fileSelector.setCurrentDirectory(new File(f.getParent()));
 				}
 				fileSelector.showOpenDialog(Text.this);
